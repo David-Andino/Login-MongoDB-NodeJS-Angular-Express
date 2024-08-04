@@ -2,12 +2,22 @@ const mongoose = require('mongoose');
 const authSchema = require('./auth.model');
 
 authSchema.statics = {
-    create: function (data, cb) {
-        const user = new this(data)
-        user.save(cb);
+    create: async function (data) {
+        try {
+            const user = new this(data);
+            await user.save();
+            return user;
+        } catch (error) {
+            throw error;
+        }
     },
-    login: function (query, cb) {
-        this.find(query, cb);
+    login: async function (query) {
+        try {
+            const users = await this.find(query).exec();
+            return users;
+        } catch (error) {
+            throw error;
+        }
     }
 }
 
